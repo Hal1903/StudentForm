@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Objects - student forms</h1>
+<label for="fname">First Name</label><br><br>
+<input type="text" id="fname"></input><br><br>
+<label for="lname">Last Name</label><br><br>
+<input type="text", id="lname"></input><br><br>
+<label for="age">Age</label><br><br>
+<input type="number" id="age"></input><br><br>
+<!--select-->
+<label for="courses">Course</label><br><br>
+<select id="courses">Choose a Course:
+	<option value="ECO201">ECO201 - Microeconomy</option>
+	<option value="ECO202">ECO202 - Macroeconomy</option>
+	<option value="PSY100">PSY100 - Introduction of Psychology</option>
+	<option value="CS115">CS115 - Introduction to Computer Programming</option>
+</select><br><br>
+<button type="button" onclick="showR()">Submit</button>
+<br>
+<p id="reg">Output for student registered info</p>
+<br><br>
+<h1>Search Box</h1>
+<!--
+<label for="byName">Search by Name</label><br><br>
+<input type="text" id="byName"></input><br><br>
+-->
+<label for="byID">Search by ID</label><br><br>
+<input type="number" id="byID"></input><br><br>
+<br>
+<button type="button" onclick="search()">Search</button>
+<p id="result">Result Here</p>
+
+<script>
+var id = 0;
+var list = [];
+
+function Student(first, last, age, course){
+	this.firstname = first;
+	this.lastname = last;
+	this.age = age;
+	this.course = course;
+	this.id = id;
+}
+
+function stuInfo(student){
+	var str = student.firstname+", "+student.lastname+", "+student.age+", "+student.course+", id:"+student.id;
+	return str;
+}
+
+function showR(){
+	var student = new Student(document.getElementById("fname").value,document.getElementById("lname").value, document.getElementById("age").value, document.getElementById("courses").value);
+	list[id] = student;
+	id++;
+	var str = stuInfo(student);
+	//student.firstname+", "+student.lastname+", "+student.age+", "+student.course+", id:"+student.id;
+	document.getElementById("reg").innerHTML = str;
+}
+
+function search(){
+	document.getElementById("result").innerHTML = stuInfo(list[document.getElementById("byID").value]);
+}
+</script>
+
+</body>
+</html>
