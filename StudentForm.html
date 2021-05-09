@@ -1,40 +1,71 @@
 <!DOCTYPE html>
 <html>
-<body>
-
-<h1>Objects - student forms</h1>
-<label for="fname">First Name</label><br><br>
-<input type="text" id="fname"></input><br><br>
-<label for="lname">Last Name</label><br><br>
-<input type="text", id="lname"></input><br><br>
-<label for="age">Age</label><br><br>
-<input type="number" id="age"></input><br><br>
-<!--select-->
-<label for="courses">Course</label><br><br>
-<select id="courses">Choose a Course:
-	<option value="ECO201">ECO201 - Microeconomy</option>
-	<option value="ECO202">ECO202 - Macroeconomy</option>
-	<option value="PSY100">PSY100 - Introduction of Psychology</option>
-	<option value="CS115">CS115 - Introduction to Computer Programming</option>
-</select><br><br>
-<button type="button" onclick="showR()">Submit</button>
-<br>
-<p id="reg">Output for student registered info</p>
-<br><br>
-<h1>Search Box</h1>
-<!--
-<label for="byName">Search by Name</label><br><br>
-<input type="text" id="byName"></input><br><br>
--->
-<label for="byID">Search by ID</label><br><br>
-<input type="number" id="byID"></input><br><br>
-<br>
-<button type="button" onclick="search()">Search</button>
-<p id="result">Result Here</p>
-
+<head>
+<title>Student Form</title>
 <script>
+var courseCount = 0;
 var id = 0;
-var list = [];
+var stuList = [];
+var AllCourses = ["","Microeconomy","Macroeconomy","Introduction of Psychology","Introduction to Computer Programming"];
+var AllCoursesVal = ["","ECO201","ECO202","PSY100","CS115"];
+
+function br(li){
+	var br = document.createElement("br");
+	li.appendChild(br);
+}
+function getCourses(){
+	var getList = [];
+	var firstS = true;
+	var count = 1;
+	const ul = document.getElementById("courseList");
+	for(var i = 0; i < ul.childNodes.length; i++){
+		var select;
+		if (ul.childNodes[i].nodeName == "LI"){
+			if (firstS){
+				select = document.getElementById("courses");
+				console.log(i+": "+select.value);
+				firstS = false;
+				}
+			else{
+				select = document.getElementById("courses"+count.toString());
+				console.log(i+": "+select.value);
+				count++;
+			}
+			getList.push(select.value);
+			}
+	}
+	return "["+getList+"]";
+}
+
+function addCourse(){
+	var count = 0;
+	courseCount++;
+	var li = document.createElement("li")
+	var newlabel = document.createElement("Label");
+	newlabel.htmlFor = "courses"+courseCount.toString();
+	console.log(newlabel);
+	newlabel.innerHTML = "Course";
+	//creating select part
+	var sel = document.createElement("select");
+	sel.id = "courses"+courseCount.toString();
+	for (const val of AllCoursesVal){
+		var option = document.createElement("option");
+		option.value = val;
+		option.text = val+" - "+AllCourses[count];
+		count++;
+		sel.appendChild(option);
+		//console.log(optiontext);
+	} count = 0;
+	br(li);
+	li.appendChild(newlabel);
+	//li.appendChild(br);
+	br(li);br(li);
+	li.appendChild(sel);
+	br(li);
+	document.getElementById("courseList").appendChild(li);
+	
+}
+
 
 function Student(first, last, age, course){
 	this.firstname = first;
@@ -50,8 +81,11 @@ function stuInfo(student){
 }
 
 function showR(){
-	var student = new Student(document.getElementById("fname").value,document.getElementById("lname").value, document.getElementById("age").value, document.getElementById("courses").value);
-	list[id] = student;
+	var courStu = [];
+	getCourses();
+	//console.log(document.getElementById("courses").value);
+	var student = new Student(document.getElementById("fname").value,document.getElementById("lname").value, document.getElementById("age").value, getCourses());//document.getElementById("courses").value);
+	stuList[id] = student;
 	id++;
 	var str = stuInfo(student);
 	//student.firstname+", "+student.lastname+", "+student.age+", "+student.course+", id:"+student.id;
@@ -59,9 +93,71 @@ function showR(){
 }
 
 function search(){
-	document.getElementById("result").innerHTML = stuInfo(list[document.getElementById("byID").value]);
+	document.getElementById("result").innerHTML = stuInfo(stuList[document.getElementById("byID").value]);
 }
 </script>
-
+<style>
+.header{
+	padding: 3px;
+	background-color: #77FF50;
+}
+body{
+	margin: 0;
+}
+.mainCont{
+	padding-left: 50px;
+}
+.addButton{
+	height:30px;
+	width:30px;
+	font: 32px
+	text-alignment: center;
+}
+</style>
+</head>
+<body>
+<div class="header">
+	<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Japan_and_U.S._flags.svg/1280px-Japan_and_U.S._flags.svg.png" alt="tag" width=80 height=80 align=left>
+	<h1 style = "color: white; text-indent: 20px">Student Form</h1>
+</div>
+<div class="mainCont">
+	<h1>Objects - student forms</h1>
+	<label for="fname">First Name</label><br><br>
+	<input type="text" id="fname"></input><br><br>
+	<label for="lname">Last Name</label><br><br>
+	<input type="text", id="lname"></input><br><br>
+	<label for="age">Age</label><br><br>
+	<input type="number" id="age"></input><br><br>
+	<!--select-->
+	<ul id="courseList" style="list-style-type: none; padding: 0;">
+		<li>
+			<label for="courses">Course</label><br><br>
+			<select id="courses">Choose a Course:
+				<option value = "-">-</option>
+				<option value="ECO201">ECO201 - Microeconomy</option>
+				<option value="ECO202">ECO202 - Macroeconomy</option>
+				<option value="PSY100">PSY100 - Introduction of Psychology</option>
+				<option value="CS115">CS115 - Introduction to Computer Programming</option>
+			</select><br>
+		</li>
+	</ul>
+	<button type="button" class="addButton" onclick="addCourse()">+</button>
+	<br>
+	<br>
+	<button type="button" onclick="showR()">Submit</button>
+	<br>
+	<p id="reg">Output for student registered info</p>
+	<br><br>
+	<h1>Search Box</h1>
+	<!--
+	<label for="byName">Search by Name</label><br><br>
+	<input type="text" id="byName"></input><br><br>
+	-->
+	<label for="byID">Search by ID</label><br><br>
+	<input type="number" id="byID"></input><br><br>
+	<br>
+	<button type="button" onclick="search()">Search</button>
+	<p id="result">Result Here</p>
+</div>
 </body>
 </html>
